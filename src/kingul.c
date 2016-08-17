@@ -1,7 +1,7 @@
 /*  
     kingul - Korean Keyboard for Kindle Paperwhite3
     Version - 0.1
-    Copyright (c) 2016 by hylo (www.hylo.cafe24.com), with MIT license:
+    Copyright (c) 2016 by hylo (hylo.cafe24.com), with MIT license:
     http://www.opensource.org/licenses/mit-license.php
     
   If you want to look more about how Hangul is processed in here,
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 	if (XFetchName(display, screen, &name) > 0) {
 	    d_log(cnt/period, "Window name: %s\n", name);
 #if 0
-	    /* There is some windows doesn't have a name: Experimental browser */
+	    /* There are some windows without a name: Experimental browser */
 	    if (!strstr(name, "searchBar") && !strstr(name, "NoteEditorDialog")) {
 		XFree(name);
 		usleep(DELAY);
