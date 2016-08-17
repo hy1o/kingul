@@ -47,7 +47,7 @@ int final_cons_ofs[] = {1, 2, 3, 4, 5, 6, 7, 35, 8, 9,
 
 int period = 300;
 int cnt = 0;
-bool debug = true;
+bool debug = false;
 
 void sendKey (XEvent *xev, KeySym keysym, int numBS, int victim);
 void printKeyEvent (XKeyEvent e);
@@ -84,10 +84,10 @@ int main(int argc, char *argv[])
     d_log(true, "minKeycode=%d, maxKeycode=%d\n", minKeycode, maxKeycode);
 
     root = DefaultRootWindow(display);
-    d_log(true, "Root Window: %x\n", root);
+    printf("Root Window: %x\n", root);
 
     if (XFetchName(display, root, &name) > 0) {
-	d_log(true, "Window name: %s\n", name);
+	printf("Window name: %s\n", name);
 	XFree(name);
     }
 
