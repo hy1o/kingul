@@ -1,6 +1,6 @@
 /*  
     kingul - Korean Keyboard for Kindle Paperwhite3
-    Version - 0.1
+    Version - 0.2
     Copyright (c) 2016 by hylo (hylo.cafe24.com), with MIT license:
     http://www.opensource.org/licenses/mit-license.php
     

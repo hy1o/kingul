@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # kingul: Korean keyboard for kindle
-# version: 0.1 (2016/08/16)
+# version: 0.2 (2016/08/23)
 #
 ##
 
