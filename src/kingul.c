@@ -23,9 +23,9 @@
 #define IS_JAMO(x)	(IS_CONSONANT(x)||IS_VOWEL(x))
 #define IS_HANGUL(x)	(IS_JAMO(x)||IS_SYLLABLES(x))
 
-#define DISASSEMBLE(x, c1, v, c2)	\
+#define DISASSEMBLE(xx, c1, v, c2)	\
     do {				\
-    x -= 0xac00;			\
+    int x = xx - 0xac00;		\
     c2 = x % 28;			\
     v = ((x-c2)/28) % 21;		\
     c1 = (((x-c2)/28)-v)/21;} while(0)
@@ -55,7 +55,7 @@ int getHangul(int keysym, int prevKeysym, int *prevHangul);
 int get_jamo_index(int jamo, int final);
 int final_to_init_cons (int jamo);
 int compose_vowels(int v1, int v2);
-int compose_consonants(int c1, int c2);
+int compose_final_consonants(int c1, int c2);
 int decompose_consonants(int c, int *c_first, int *c_second);
 
 
@@ -205,11 +205,12 @@ int getHangul(int keysym, int prevKeysym, int *prevHangul)
     /* c1 - initial consonant
      * v - vowel
      * c2 - final consonant
+     * pc2 - previous final consonant
      */
-    int c1, v, c2;
+    int c1, v, c2, pc2;
     int jamo, ret;
 
-    c1 = v = c2 = ret = 0;
+    c1 = v = c2 = pc2 = ret = 0;
     if (IS_HANGUL(keysym) && IS_HANGUL(prevKeysym))
     {
 	// current keysym should be c2
@@ -221,7 +222,7 @@ int getHangul(int keysym, int prevKeysym, int *prevHangul)
 	    {
 		if((jamo = get_jamo_index(keysym, 1)) < 0)
 		    return 0;
-		if(c2 != 0 && ((jamo = compose_consonants(c2, jamo)) < 0))
+		if(c2 != 0 && ((jamo = compose_final_consonants(c2, jamo)) < 0))
 		    return 0;
 		c2 = jamo;
 	    }
@@ -235,7 +236,13 @@ int getHangul(int keysym, int prevKeysym, int *prevHangul)
 		    if(!IS_HANGUL(*prevHangul))
 			return 0;
 		    if((c1=final_to_init_cons(c2)) < 0)
-			return 0;
+		    {
+			DISASSEMBLE(prevKeysym, c1, v, c2);
+			if(decompose_consonants(c2, &pc2, &c2) < 0)
+			    return 0;
+			ASSEMBLE(*prevHangul, c1, v, pc2);
+			c1 = c2;
+		    }
 		    c2 = 0;
 		    v = jamo;
 		}
@@ -292,17 +299,19 @@ int final_to_init_cons (int fin)
 {
     switch (fin)
     {
-	case 1:	case 2:	case 3:
-	case 4:	case 5:	case 6:
-	case 7:
+	/* Special consonants 
+	 * case 3: case 5: case 6: 
+	 * case 9: case 10: case 11: 
+	 * case 12: case 13:case 14: 
+	 * case 15: case 18:  
+	 */
+	case 1:	case 2:		
+	case 4:	case 7:
 	    return init_cons_ofs[fin-1];
-	case  8: case  9: case 10:
-	case 11: case 12: case 13:
-	case 14: case 15: case 16: 
-	case 17:
+	case  8: case 16: case 17:
 	    return init_cons_ofs[fin];
-	case 18: case 19: case 20:
-	case 21: case 22:
+	case 19: case 20: case 21: 
+	case 22:
 	    return init_cons_ofs[fin+1];
 	case 23: case 24: case 25:
 	case 26: case 27:
@@ -337,7 +346,7 @@ int compose_vowels(int v1, int v2)
     return -1;
 }
 
-int compose_consonants(int c1, int c2)
+int compose_final_consonants(int c1, int c2)
 {
     if (c1 == 1 && c2 == 19) /* k s */
 	return 3;
@@ -364,10 +373,47 @@ int compose_consonants(int c1, int c2)
     return -1;
 }
 
+/* returns c_first as final consonant, c_second as initial */
 int decompose_consonants(int c, int *c_first, int *c_second)
 {
-    // FIXME: To be implemented
-    return -1;
+    if (c == 3) {
+	*c_first = 1;
+	*c_second = 9;
+    } else if (c == 5) {
+	*c_first = 4;
+	*c_second = 12;
+    } else if (c == 6) {
+	*c_first = 4;
+	*c_second = 18;
+    } else if (c == 9) {
+	*c_first = 8;
+	*c_second = 0;
+    } else if (c == 10) {
+	*c_first = 8;
+	*c_second = 6;
+    } else if (c == 11) {
+	*c_first = 8;
+	*c_second = 7;
+    } else if (c == 12) {
+	*c_first = 8;
+	*c_second = 9;
+    } else if (c == 13) {
+	*c_first = 8;
+	*c_second = 16;
+    } else if (c == 14) {
+	*c_first = 8;
+	*c_second = 17;
+    } else if (c == 15) {
+	*c_first = 8;
+	*c_second = 18;
+    } else if (c == 18) {
+	*c_first = 17;
+	*c_second = 9;
+    } else {
+	return -1;
+    }
+
+    return 1;
 }
 
 void printKeyEvent (XKeyEvent e)
