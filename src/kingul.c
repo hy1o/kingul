@@ -15,7 +15,7 @@
 #include <X11/keysym.h>
 #include <X11/XKBlib.h>
 
-#define DELAY 10000
+#define DELAY 10000 //10ms
 
 #define IS_CONSONANT(x) (0x3131<=x&&x<=0x314E)
 #define IS_VOWEL(x)	(0x314F<=x&&x<=0x3163)
@@ -38,7 +38,7 @@
 
 //ㄱㄲㄳㄴㄵㄶㄷㄸㄹㄺㄹㄻㄼㄽㄾㄿㅀㅁㅂㅃㅄㅅㅆㅇㅈㅉㅊㅋㅍㅎ
 //ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ
-int init_cons_ofs[] = {0, 1, -1, 2, 92, 93, 3, 23, 5, 39012, 
+int init_cons_ofs[] = {0, 1, -1, 2, 92, 93, 3, 4/*23*/, 5, 39012, 
 		    39016, 39017, 39020, -1, -1, 26, 6, 7, 8, 33, 
 		    9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 int final_cons_ofs[] = {1, 2, 3, 4, 5, 6, 7, 35, 8, 9, 
@@ -181,12 +181,15 @@ void sendKey (XEvent *xev, KeySym keysym, int numBS, int victim)
     if (keysym == 0)
 	return;
 
+    /* backspace */
     xev->xkey.keycode = 0x16;
     xev->type = KeyPress;
     xev->xkey.type = KeyPress;
+    xev->xkey.state = 0;
     for (i = 0; i < numBS; ++i)
 	XSendEvent(xev->xkey.display, xev->xkey.window, False, KeyPressMask, (XEvent*)xev);
 
+    /* composed character */
     XChangeKeyboardMapping(xev->xkey.display, victim, 1, &keysym, 1);
     xev->xkey.keycode = victim;
     xev->type = KeyPress;
@@ -249,9 +252,9 @@ int getHangul(int keysym, int prevKeysym, int *prevHangul)
 	else if (IS_CONSONANT(prevKeysym))
 	{
 	    c1 = get_jamo_index(prevKeysym, 0);
+
 	    if (IS_CONSONANT(keysym))
 		return 0;
-
 	    else if (IS_VOWEL(keysym))
 	    {
 		if((jamo = get_jamo_index(keysym, 0)) < 0)
