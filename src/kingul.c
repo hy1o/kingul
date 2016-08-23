@@ -10,12 +10,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdbool.h> 
 #include <unistd.h> 
 #include <X11/keysym.h>
 #include <X11/XKBlib.h>
 
-#define DELAY 10000 //10ms
+#define DELAY_ACTIVE	10000;	    // 10ms
+#define DELAY_INACTIVE	3000000;    // 3s
+#define DELAY_SLEEP	10000000;    // 10s
 
 #define IS_CONSONANT(x) (0x3131<=x&&x<=0x314E)
 #define IS_VOWEL(x)	(0x314F<=x&&x<=0x3163)
@@ -48,6 +51,7 @@ int final_cons_ofs[] = {1, 2, 3, 4, 5, 6, 7, 35, 8, 9,
 int period = 300;
 int cnt = 0;
 bool debug = false;
+int delay = DELAY_INACTIVE;
 
 void sendKey (XEvent *xev, KeySym keysym, int numBS, int victim);
 void printKeyEvent (XKeyEvent e);
@@ -62,6 +66,7 @@ int decompose_consonants(int c, int *c_first, int *c_second);
 int main(int argc, char *argv[]) 
 {
     Window root, screen;
+    Window parent, *children; 
     Display * display;
     XEvent xev;
     int minKeycode, maxKeycode;
@@ -69,6 +74,7 @@ int main(int argc, char *argv[])
     int keysym, prevKeysym = 0;
     int revert_to, numBS;
     int ret, i;
+    unsigned int num_children;
     char *name = NULL;
 
     XSetWindowAttributes attr;
@@ -95,9 +101,10 @@ int main(int argc, char *argv[])
 	if(cnt > period) 
 	    cnt = 0;
 
+	delay = DELAY_INACTIVE;
 	ret = XGetInputFocus(display, &screen, &revert_to);
 	/*
-	if (ret) { // it always give BadRequest(1), but right screen 
+	if (ret) { // it always give BadRequest(1), but the right screen 
 	    printf("get input focus failed ret = %d\n", ret);
 	    printf("Focused window = %x\n", screen);
 	    continue;
@@ -109,17 +116,34 @@ int main(int argc, char *argv[])
 	    // FIXME: If window has changed, initialize prevKeysym
 	}
 
-	if (XFetchName(display, screen, &name) > 0) {
+	if (!XQueryTree(display, screen, &root, &parent, &children, &num_children)) {
+	    if (children) XFree((char *)children);
+	    usleep(delay);
+	    continue;
+	}
+	if (children) XFree((char *)children);
+
+	// Adjust the delay
+	if (screen != 0 && XFetchName(display, screen, &name) > 0) {
 	    d_log(cnt/period, "Window name: %s\n", name);
-#if 0
-	    /* There are some windows without a name: Experimental browser */
-	    if (!strstr(name, "searchBar") && !strstr(name, "NoteEditorDialog")) {
-		XFree(name);
-		usleep(DELAY);
-		continue;
+	    if (strstr(name, "searchBar") || strstr(name, "NoteEditorDialog")) {
+		delay = DELAY_ACTIVE;
+	    } else if (strstr(name, "screenSaver")) {
+		delay = DELAY_SLEEP;
 	    }
-#endif
 	    XFree(name);
+	/* There are some windows without a name: Experimental browser */
+	} else if (parent != 0 && XFetchName(display, parent, &name) > 0) {
+	    d_log(cnt/period, "Parents window name: %s\n", name);
+	    if (strstr(name, "com.lab126.browser")) {
+		delay = DELAY_ACTIVE;
+	    }
+	    XFree(name);
+	}
+
+	if (screen == 0x0) {
+	    usleep(delay);
+	    continue;
 	}
 
 	attr.event_mask = KeyReleaseMask;
@@ -134,7 +158,7 @@ int main(int argc, char *argv[])
 	 * XNextEvent is blocking call, so use XCheckWindowEvent instead*/
 	if (!XCheckWindowEvent(display, screen, KeyReleaseMask, &xev)) {
 	    cnt++;
-	    usleep(DELAY);
+	    usleep(delay);
 	    continue;
 	}
 
@@ -167,7 +191,7 @@ int main(int argc, char *argv[])
 		break;
 	} /* switch(xev.type) */
 	cnt++;
-	usleep(DELAY);
+	usleep(delay);
     } /* while */
 
     XCloseDisplay(display);
