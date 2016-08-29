@@ -1,6 +1,6 @@
 /*  
     kingul - Korean Keyboard for Kindle Paperwhite3
-    Version - 0.2
+    Version - 0.3
     Copyright (c) 2016 by hylo (hylo.cafe24.com), with MIT license:
     http://www.opensource.org/licenses/mit-license.php
     
@@ -353,46 +353,46 @@ int final_to_init_cons (int fin)
 
 int compose_vowels(int v1, int v2)
 {
-    if (v1 == 8 && v2 == 0) /* o and ah */
+    if (v1 == 8 && v2 == 0) /* ㅗ and ㅏ */
 	return 9;
-    if (v1 == 8 && v2 == 1) /* o and ae */
+    if (v1 == 8 && v2 == 1) /* ㅗ and ㅐ */
 	return 10;
-    if (v1 == 8 && v2 == 20) /* o and ee */
+    if (v1 == 8 && v2 == 20) /* ㅗ and ㅣ */
 	return 11;
-    if (v1 == 13 && v2 == 4) /* oo and uh */
+    if (v1 == 13 && v2 == 4) /* ㅜ and ㅓ */
 	return 14;
-    if (v1 == 13 && v2 == 5) /* oo and eh */
+    if (v1 == 13 && v2 == 5) /* ㅜ and ㅔ */
 	return 15;
-    if (v1 == 13 && v2 == 20) /* oo and ee */
+    if (v1 == 13 && v2 == 20) /* ㅜ and ㅣ */
 	return 16;
-    if (v1 == 18 && v2 == 20) /* eu and ee */
+    if (v1 == 18 && v2 == 20) /* ㅡ and ㅣ */
 	return 19;
     return -1;
 }
 
 int compose_final_consonants(int c1, int c2)
 {
-    if (c1 == 1 && c2 == 19) /* k s */
+    if (c1 == 1 && c2 == 19) /* ㄳ */
 	return 3;
-    if (c1 == 4 && c2 == 22) /* n z */
+    if (c1 == 4 && c2 == 22) /* ㄵ */
 	return 5;
-    if (c1 == 4 && c2 == 27) /* n h */
+    if (c1 == 4 && c2 == 27) /* ㄶ */
 	return 6;
-    if (c1 == 8 && c2 == 1) /* l k */
+    if (c1 == 8 && c2 == 1) /* ㄺ */
 	return 9;
-    if (c1 == 8 && c2 == 16) /* l m */
+    if (c1 == 8 && c2 == 16) /* ㄻ */
 	return 10;
-    if (c1 == 8 && c2 == 17) /* l b */
+    if (c1 == 8 && c2 == 17) /* ㄼ */
 	return 11;
-    if (c1 == 8 && c2 == 19) /* l s */
+    if (c1 == 8 && c2 == 19) /* ㄽ */
 	return 12;
-    if (c1 == 8 && c2 == 25) /* l t */
+    if (c1 == 8 && c2 == 25) /* ㄾ */
 	return 13;
-    if (c1 == 8 && c2 == 26) /* l p */
+    if (c1 == 8 && c2 == 26) /* ㄿ */
 	return 14;
-    if (c1 == 8 && c2 == 27) /* l h */
+    if (c1 == 8 && c2 == 27) /* ㅀ */
 	return 15;
-    if (c1 == 17 && c2 == 19) /* b s */
+    if (c1 == 17 && c2 == 19) /* ㅄ */
 	return 18;
     return -1;
 }
