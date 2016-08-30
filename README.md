@@ -38,3 +38,8 @@ Put the uinstall.bin file to Kindle/mrpackages and run it with MRPI helper
 (3) The keyboard configuration file on the device, storing the keyboard options in the setting, is generated fresh on every reboot. I couldn't find the source of this conf. So, this conf file is being modified on every boot for now.
 
 ## 6) TODO
+(1) Fix crash on Social Network feature
+
+(2) Make KUAL GUI menu
+
+(3) Prevent from automatically choosing japanese keyboard on startup

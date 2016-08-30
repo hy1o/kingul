@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # kingul: Korean keyboard for kindle
-# version: 0.3 (2016/08/29)
+# version: 0.4 (2016/08/30)
 # uninstaller
 ##
 
@@ -9,6 +9,13 @@ HACKNAME="kingul"
 
 # Pull libOTAUtils for logging & progress handling
 [ -f ./libotautils5 ] && source ./libotautils5
+
+otautils_update_progressbar
+
+LIPC_PROP=`lipc-get-prop com.lab126.keyboard languages`
+LIPC_PROP=${LIPC_PROP/:ko/}
+LIPC_PROP=${LIPC_PROP/ko:/}
+lipc-set-prop com.lab126.keyboard languages "$LIPC_PROP"
 
 otautils_update_progressbar
 
