@@ -1,1 +1,4 @@
-kindletool create ota2 -d kindle5 uninstall.sh libotautils5 Update_kingul_0.4_uninstall.bin
+PACKAGE_NAME=Update_kingul_0.5_uninstall.bin
+CONTENTS="uninstall.sh libotautils5"
+DEVICE=kindle5
+kindletool create ota2 -d ${DEVICE} ${CONTENTS} ${PACKAGE_NAME}

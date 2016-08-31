@@ -1,0 +1,32 @@
+{
+	"comment001": "Kingul KUAL companion",
+	"comment002": "v0.5",
+	"comment003": "by hylo",
+	"items": [
+	{
+		"name": "Kingul",
+		"priority": -1,
+		"items": [
+		{
+			"name": "* Restart Kingul *",
+			"action": "./bin/kingul.sh",
+			"params": "restart",
+			"exitmenu": false,
+			"checked": true,
+			"refresh": false,
+			"status": false,
+			"internal": "status Restart kingul"
+		},
+		{
+			"name": "* Toggle keyboard selection *",
+			"action": "./bin/kingul.sh",
+			"params": "toggle_selection",
+			"exitmenu": false,
+			"refresh": true,
+			"status": false,
+			"internal": "status Toggle Korean Keyboard selection"
+		}
+		]
+	}
+	]
+}

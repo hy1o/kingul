@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension>
+	<information>
+		<name>Kingul</name>
+		<version>0.5</version>
+		<author>Hylo</author>
+		<id>Kingul-Menu</id>
+	</information>
+	<menus>
+		<menu type="json" dynamic="true">menu.json</menu>
+	</menus>
+</extension>
