@@ -40,6 +40,42 @@ if [ "$(id -u)" -ne 0 ] ; then
 	exit 1
 fi
 
+## Enable a specific trigger file in the hack's basedir
+# Arg 1 is exact config trigger file name
+##
+enable_hack_trigger_file()
+{
+	if [ $# -lt 1 ] ; then
+		kh_msg "not enough arguments passed to enable_hack_trigger_file ($# while we need at least 1)" W v "missing trigger file name"
+	fi
+
+	kh_trigger_file="${KH_HACK_BASEDIR}/${1}"
+
+	touch "${kh_trigger_file}"
+}
+
+## Remove a specific trigger file in the hack's basedir
+# Arg 1 is exact config trigger file name
+##
+disable_hack_trigger_file()
+{
+	if [ $# -lt 1 ] ; then
+		kh_msg "not enough arguments passed to disable_hack_trigger_file ($# while we need at least 1)" W v "missing trigger file name"
+		return 1
+	fi
+
+	kh_trigger_file="${KH_HACK_BASEDIR}/${1}"
+
+	rm -f "${kh_trigger_file}"
+}
+
+version()
+{
+    VERSION=`/mnt/us/kingul/bin/kingul -v`
+    kh_msg "                       ${VERSION}" I v
+}
+
+
 ## Try to restart kingul
 restart()
 {
@@ -59,19 +95,45 @@ toggle_selection()
     LEN=$(( ${#LIPC_PROP} - ${#LIPC_PROP2} ))
 
     if [ $LEN -eq 0 ]; then
+	kh_msg "                  Select Korean keyboard" I v
 	lipc-set-prop com.lab126.keyboard languages "$LIPC_PROP":ko
     else
+	kh_msg "                  Deselect Korean keyboard" I v
 	lipc-set-prop com.lab126.keyboard languages "$LIPC_PROP2"
     fi
 }
 
+enable_debug()
+{
+    enable_hack_trigger_file "DEBUG"
+    stop kingul
+    start kingul
+    kh_msg "Debug enabled" I a
+}
+
+disable_debug()
+{
+    disable_hack_trigger_file "DEBUG"
+    stop kingul
+    start kingul
+    kh_msg "Debug disabled" I a
+}
 
 ## Main
 case "${1}" in
+	"version" )
+		${1}
+	;;
 	"restart" )
 		${1}
 	;;
 	"toggle_selection" )
+		${1}
+	;;
+	"enable_debug" )
+		${1}
+	;;
+	"disable_debug" )
 		${1}
 	;;
 	* )

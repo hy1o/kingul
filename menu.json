@@ -8,6 +8,16 @@
 		"priority": -1,
 		"items": [
 		{
+			"name": "Show current version",
+			"action": "./bin/kingul.sh",
+			"params": "version",
+			"exitmenu": false,
+			"checked": true,
+			"refresh": false,
+			"status": false,
+			"internal": "status Show version"
+		},
+		{
 			"name": "* Restart Kingul *",
 			"action": "./bin/kingul.sh",
 			"params": "restart",
@@ -22,9 +32,29 @@
 			"action": "./bin/kingul.sh",
 			"params": "toggle_selection",
 			"exitmenu": false,
-			"refresh": true,
+			"refresh": false,
 			"status": false,
 			"internal": "status Toggle Korean Keyboard selection"
+		},
+		{
+			"name": "Enable debug",
+			"if": "\"/mnt/us/kingul/DEBUG\" -f!",
+			"action": "./bin/kingul.sh",
+			"params": "enable_debug",
+			"exitmenu": false,
+			"refresh": true,
+			"status": false,
+			"internal": "status Enable debug mode(check kingul.log)"
+		},
+		{
+			"name": "Disable debug(default)",
+			"if": "\"/mnt/us/kingul/DEBUG\" -f",
+			"action": "./bin/kingul.sh",
+			"params": "disable_debug",
+			"exitmenu": false,
+			"refresh": true,
+			"status": false,
+			"internal": "status Disable debug mode(check kingul.log)"
 		}
 		]
 	}

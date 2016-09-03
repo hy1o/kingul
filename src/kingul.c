@@ -1,6 +1,6 @@
 /*  
     kingul - Korean Keyboard for Kindle Paperwhite3
-    Version - 0.3
+    Version - 0.6
     Copyright (c) 2016 by hylo (hylo.cafe24.com), with MIT license:
     http://www.opensource.org/licenses/mit-license.php
     
@@ -13,9 +13,11 @@
 #include <string.h>
 #include <stdbool.h> 
 #include <unistd.h> 
+#include <getopt.h>
 #include <X11/keysym.h>
 #include <X11/XKBlib.h>
 
+#define VERSION "0.6"
 #define DELAY_ACTIVE	10000;	    // 10ms
 #define DELAY_INACTIVE	3000000;    // 3s
 #define DELAY_SLEEP	10000000;    // 10s
@@ -73,12 +75,26 @@ int main(int argc, char *argv[])
     int hangul, prevHangul;
     int keysym, prevKeysym = 0;
     int revert_to, numBS;
-    int ret, i;
+    int ret, i, opt;
     unsigned int num_children;
     char *name = NULL;
 
     XSetWindowAttributes attr;
     XWindowAttributes wattr;
+
+    while ((opt = getopt(argc, argv, "dvh")) != -1) {
+	switch (opt) {
+	    case 'd': debug = true; break;
+	    case 'v': printf("%s\n", VERSION); return 0;
+	    case 'h':
+	    default :
+		      printf("Usage: kingul -OPTION\n"
+			      "-d: debug\n"
+			      "-v: version\n"
+			      "-h: help\n");
+		      return 0;
+	}
+    }
 
     display = XOpenDisplay(NULL);
     if(display == NULL) {
@@ -126,7 +142,8 @@ int main(int argc, char *argv[])
 	// Adjust the delay
 	if (screen != 0 && XFetchName(display, screen, &name) > 0) {
 	    d_log(cnt/period, "Window name: %s\n", name);
-	    if (strstr(name, "searchBar") || strstr(name, "NoteEditorDialog")) {
+	    if (strstr(name, "searchBar") || strstr(name, "Dialog") 
+		    || strstr(name, "dialog") || strstr(name, "settings")) {
 		delay = DELAY_ACTIVE;
 	    } else if (strstr(name, "screenSaver")) {
 		delay = DELAY_SLEEP;
