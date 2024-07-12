@@ -14,10 +14,11 @@
 #include <stdbool.h> 
 #include <unistd.h> 
 #include <getopt.h>
+#include <sys/time.h>
 #include <X11/keysym.h>
 #include <X11/XKBlib.h>
 
-#define VERSION "0.6"
+#define VERSION "0.7"
 #define DELAY_ACTIVE	10000;	    // 10ms
 #define DELAY_INACTIVE	3000000;    // 3s
 #define DELAY_SLEEP	10000000;    // 10s
@@ -50,7 +51,7 @@ int final_cons_ofs[] = {1, 2, 3, 4, 5, 6, 7, 35, 8, 9,
 		    10, 11, 12, 13, 14, 15, 16, 17, 50751, 18, 
 		    19, 20, 21, 22, 50770, 23, 24, 25, 26, 27};
 
-int period = 300;
+int period = 3;
 int cnt = 0;
 bool debug = false;
 int delay = DELAY_INACTIVE;
@@ -78,22 +79,33 @@ int main(int argc, char *argv[])
     int ret, i, opt;
     unsigned int num_children;
     char *name = NULL;
+    char *logfile = NULL;
 
     XSetWindowAttributes attr;
     XWindowAttributes wattr;
 
-    while ((opt = getopt(argc, argv, "dvh")) != -1) {
+    struct timeval tv;
+    struct timeval tv2;
+    float elapsed = 0;
+
+    while ((opt = getopt(argc, argv, "dvhl:")) != -1) {
 	switch (opt) {
 	    case 'd': debug = true; break;
 	    case 'v': printf("%s\n", VERSION); return 0;
+	    case 'l': logfile = optarg; break;
 	    case 'h':
 	    default :
 		      printf("Usage: kingul -OPTION\n"
 			      "-d: debug\n"
+			      "-l: logfile path\n"
 			      "-v: version\n"
 			      "-h: help\n");
 		      return 0;
 	}
+    }
+    if (logfile != NULL) {
+        printf("logfile = %s\n", logfile);
+        freopen(logfile, "w", stdout);
     }
 
     display = XOpenDisplay(NULL);
@@ -114,6 +126,7 @@ int main(int argc, char *argv[])
     }
 
     while(true)	{
+	gettimeofday(&tv, NULL);
 	if(cnt > period) 
 	    cnt = 0;
 
@@ -135,6 +148,10 @@ int main(int argc, char *argv[])
 	if (!XQueryTree(display, screen, &root, &parent, &children, &num_children)) {
 	    if (children) XFree((char *)children);
 	    usleep(delay);
+
+	    gettimeofday(&tv2, NULL);
+	    elapsed = (tv2.tv_sec - tv.tv_sec)*1000.0 + (tv2.tv_usec - tv.tv_usec)/1000.0;
+	    d_log(true, "Elapsed (1): %.3f msec\n", elapsed); 
 	    continue;
 	}
 	if (children) XFree((char *)children);
@@ -160,6 +177,10 @@ int main(int argc, char *argv[])
 
 	if (screen == 0x0) {
 	    usleep(delay);
+
+	    gettimeofday(&tv2, NULL);
+	    elapsed = (tv2.tv_sec - tv.tv_sec)*1000.0 + (tv2.tv_usec - tv.tv_usec)/1000.0;
+	    d_log(true, "Elapsed (2): %.3f msec\n", elapsed); 
 	    continue;
 	}
 
@@ -176,7 +197,15 @@ int main(int argc, char *argv[])
 	if (!XCheckWindowEvent(display, screen, KeyReleaseMask, &xev)) {
 	    cnt++;
 	    usleep(delay);
+
+	    gettimeofday(&tv2, NULL);
+	    elapsed = (tv2.tv_sec - tv.tv_sec)*1000.0 + (tv2.tv_usec - tv.tv_usec)/1000.0;
+	    d_log(true, "Elapsed (3): %.3f msec\n", elapsed); 
 	    continue;
+
+	    gettimeofday(&tv2, NULL);
+	    elapsed = (tv2.tv_sec - tv.tv_sec)*1000.0 + (tv2.tv_usec - tv.tv_usec)/1000.0;
+	    d_log(true, "Elapsed (4): %.3f msec\n", elapsed); 
 	}
 
 	prevKeysym = keysym;

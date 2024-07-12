@@ -8,13 +8,22 @@ install용 bin 파일을 mrpackages 폴더에 넣은 후 KUAL --> Helpers --> In
 
 KUAL --> Kingul --> Toggle keyboard selection
 
-Kindle settings --> Language & Dictionaries --> Keyboards --> Korean 선택
+Kindle Settings --> Language & Dictionaries --> Keyboards --> Korean 선택
 
 그 후 keyboard에서 globe symbol 터치하시면 한글 키보드가 나옵니다.
 
+
+디버깅:
+
+KUAL --> Kingul --> Enable debug
+
+컴퓨터에 연결 후 kingul/kingul.log 확인
+
 ## 업데이트 내역
 
-- v0.62: 최신 KindleTool로 최신 기기들 (OA2, Scribe) 지원 (credit to [@decoderkurt])
+- v0.7: 최근 펌웨어 (v15.1.1)에서 제대로 동작하도록 수정. 디버그 모드 구현
+
+- v0.62: 최신 KindleTool로 최신 기기들 (OA2, Scribe) 지원 (credit to @decoderkurt)
 
 - v0.6: Social network, collection dialog 크래시 수정 
 
@@ -39,6 +48,7 @@ This hack provides you such a postprocessing on Kindle PW3 device.
 
 ## 1) How it works
 When you type a key on the screen, it sends to the appropriate window an event that indicates the key is pressed or released.
+
 This hack continoulsy tries to catch a currently focused window, peeks the key event, does the postprocessing by entering or deleting characters.
 
 ## 2) Limitations
@@ -46,11 +56,20 @@ This hack continoulsy tries to catch a currently focused window, peeks the key e
 
 (If you press backspace, whole composed character will be deleted)
 
-
 ## 3) Installation
 Prerequisites: Jailbroken PW3 device, KUAL + MRPI Installer
 
 Put the install.bin file to Kindle/mrpackages and run it with MRPI helper
+
+KUAL --> Kingul --> Toggle Keyboard Selection 
+
+Kindle Settings --> Language & Dictionaries --> Keyboards --> Korean 
+
+### Debugging
+
+KUAL --> Kingul --> Enable debug
+
+Provide us kingul/kingul.log
 
 ## 4) Uninstallation
 Put the uinstall.bin file to Kindle/mrpackages and run it with MRPI helper
@@ -65,12 +84,14 @@ Put the uinstall.bin file to Kindle/mrpackages and run it with MRPI helper
 ## 6) TODO
 (1) Prevent from automatically choosing japanese keyboard on startup
 
-(2) Make redirection working to log the output
+~~(2) Make redirection working to log the output~~
 
 
 ## 7) Update log
 
-- v0.62: Used the latest KindleToolto support newer devices (OA2, Scribe) (credit to [@decoderkurt])
+- v0.7: Support modern firmware versions (v15.1.1). Enable debug logging
+
+- v0.62: Used the latest KindleToolto support newer devices (OA2, Scribe) (credit to @decoderkurt)
 
 - v0.6: Fixed crash in Social network and collection dialog
 
