@@ -1,6 +1,6 @@
 # kingul
 
-## 킨들용 한글 키보드
+## 킨글: 킨들용 한글 키보드
 
 사용방법:
 
@@ -21,7 +21,7 @@ KUAL --> Kingul --> Enable debug
 
 ## 업데이트 내역
 
-- v0.7: 최근 펌웨어 (v15.1.1)에서 제대로 동작하도록 수정. 디버그 모드 구현
+- v0.7: 최근 펌웨어 (v5.15.1)에서 제대로 동작하도록 수정. 디버그 모드 구현
 
 - v0.62: 최신 KindleTool로 최신 기기들 (OA2, Scribe) 지원 (credit to @decoderkurt)
 
@@ -33,7 +33,7 @@ KUAL --> Kingul --> Enable debug
 
 --- 
 
-## Korean Keyboard for Kindle Paperwhite3
+## Korean Keyboard for Kindle E-readers
 
 Kingul is a compound word of 'Kindle' and 'Hangul', name of the Korean alphabet.
 Since PW3 doesn't support Korean keyboard, I made one for myself.
@@ -89,7 +89,7 @@ Put the uinstall.bin file to Kindle/mrpackages and run it with MRPI helper
 
 ## 7) Update log
 
-- v0.7: Support modern firmware versions (v15.1.1). Enable debug logging
+- v0.7: Support modern firmware versions (v5.15.1). Enable debug logging
 
 - v0.62: Used the latest KindleToolto support newer devices (OA2, Scribe) (credit to @decoderkurt)
 
