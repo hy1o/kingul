@@ -1,4 +1,29 @@
 # kingul
+
+## 킨들용 한글 키보드
+
+사용방법:
+
+install용 bin 파일을 mrpackages 폴더에 넣은 후 KUAL --> Helpers --> Install MRPI packages
+
+KUAL --> Kingul --> Toggle keyboard selection
+
+Kindle settings --> Language & Dictionaries --> Keyboards --> Korean 선택
+
+그 후 keyboard에서 globe symbol 터치하시면 한글 키보드가 나옵니다.
+
+## 업데이트 내역
+
+- v0.62: 최신 KindleTool로 최신 기기들 (OA2, Scribe) 지원 (credit to [@decoderkurt])
+
+- v0.6: Social network, collection dialog 크래시 수정 
+
+- v0.5: KUAL 메뉴 구현
+
+- v0.4: PW2, Kindle Voyage 지원
+
+--- 
+
 ## Korean Keyboard for Kindle Paperwhite3
 
 Kingul is a compound word of 'Kindle' and 'Hangul', name of the Korean alphabet.
@@ -41,3 +66,14 @@ Put the uinstall.bin file to Kindle/mrpackages and run it with MRPI helper
 (1) Prevent from automatically choosing japanese keyboard on startup
 
 (2) Make redirection working to log the output
+
+
+## 7) Update log
+
+- v0.62: Used the latest KindleToolto support newer devices (OA2, Scribe) (credit to [@decoderkurt])
+
+- v0.6: Fixed crash in Social network and collection dialog
+
+- v0.5: Implemented KUAL menu
+
+- v0.4: Tested on PW2, Voyage
