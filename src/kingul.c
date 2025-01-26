@@ -18,7 +18,7 @@
 #include <X11/keysym.h>
 #include <X11/XKBlib.h>
 
-#define VERSION "0.72"
+#define VERSION "0.73"
 #define DELAY_ACTIVE	10000;	    // 10ms
 #define DELAY_INACTIVE	3000000;    // 3s
 #define DELAY_SLEEP	10000000;    // 10s
