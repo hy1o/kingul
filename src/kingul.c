@@ -18,7 +18,7 @@
 #include <X11/keysym.h>
 #include <X11/XKBlib.h>
 
-#define VERSION "0.71"
+#define VERSION "0.72"
 #define DELAY_ACTIVE	10000;	    // 10ms
 #define DELAY_INACTIVE	3000000;    // 3s
 #define DELAY_SLEEP	10000000;    // 10s
@@ -169,7 +169,8 @@ int main(int argc, char *argv[])
             /* There are some windows without a name: Experimental browser */
         } else if (parent != 0 && XFetchName(display, parent, &name) > 0) {
             d_log(cnt/period, "Parents window name: %s\n", name);
-            if (strstr(name, "com.lab126.browser")) {
+            if (strstr(name, "com.lab126.browser") || strstr(name, "ScreenSearch")
+                    || strstr(name, "Dialog") || strstr(name, "dialog")) {
                 delay = DELAY_ACTIVE;
             }
             XFree(name);

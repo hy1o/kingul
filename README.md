@@ -21,6 +21,8 @@ KUAL --> Kingul --> Enable debug
 
 ## 업데이트 내역
 
+- v0.72: 최근 펌웨어 (v5.16.3) 이 후 hf 변경 대응, parent window name 변경 반영
+
 - v0.7: 최근 펌웨어 (v5.15.1)에서 제대로 동작하도록 수정. 디버그 모드 구현
 
 - v0.62: 최신 KindleTool로 최신 기기들 (OA2, Scribe) 지원 (credit to @decoderkurt)
@@ -88,6 +90,8 @@ Put the uinstall.bin file to Kindle/mrpackages and run it with MRPI helper
 
 
 ## 7) Update log
+
+- v0.72: Support firmware < v5.16.3 (now built using kindlehf toolchain), updated changed parent window names
 
 - v0.7: Support modern firmware versions (v5.15.1). Enable debug logging
 
